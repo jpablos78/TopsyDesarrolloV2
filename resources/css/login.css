@@ -1,0 +1,12 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 28/03/2017, 13:47:16
+    Author     : jpsanchez
+*/
+
+body { background:#fff none; color:#000; font-family:verdana,tahoma,arial,verdana,sans-serif; font-size:11px; margin:0; }
+#qo-panel { background:transparent url(../images/imagenes/bg-topsy.jpg) no-repeat; width:800px; height:520px; left:50%; margin-left:-404px; margin-top:-260px; position:absolute; top:50%;  }
