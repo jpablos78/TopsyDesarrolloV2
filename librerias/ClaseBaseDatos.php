@@ -205,9 +205,24 @@ class ClaseBaseDatos {
      * @return array o string vacio si hay un error
      */
     public function query($query) {
+        $nombreFichero = "log.txt";
+
+        $gestor = fopen($nombreFichero, "a+") or die("Problemas en la creacion");
+        fwrite($gestor, '--------------------------------------------------------------------------------');
+        fwrite($gestor, "\r\n");
+        fwrite($gestor, '-- ' . date("d m Y H:i:s:ms") . " - ");
+        fwrite($gestor, "\r\n");
+        fwrite($gestor, $query);
+        fwrite($gestor, "\r\n");
+        //fclose($gestor);
+
+
         $result = odbc_exec($this->mssql, $query);
 
         if (odbc_error()) {
+            fwrite($gestor, "-- Error: " . utf8_encode($this->getErrorMsj()));
+            fwrite($gestor, "\r\n");
+            fclose($gestor);
             return "";
         } else {
             $registros = array();
@@ -215,6 +230,7 @@ class ClaseBaseDatos {
                 $registros[] = array_map('utf8_encode', $row);
             }
 
+            fclose($gestor);
             return $registros;
         }
     }

@@ -46,6 +46,7 @@ Ext.define('Topsy.view.Login', {
                     fieldLabel: 'Contraseña',
                     maxLength: 25
                 },
+
                 {
                     xtype: 'hidden',
                     id: 'S_se_codigo'
@@ -57,6 +58,10 @@ Ext.define('Topsy.view.Login', {
                 {
                     xtype: 'hidden',
                     id: 'S_pe_codigo'
+                },
+                {
+                    xtype: 'hidden',
+                    id: 'S_pe_desc'
                 },
                 {
                     xtype: 'hidden',
@@ -72,7 +77,11 @@ Ext.define('Topsy.view.Login', {
                 },
                 {
                     xtype: 'hidden',
-                    id: 'S_nombres_apellidos'
+                    id: 'S_us_nombres_apellidos'
+                },
+                {
+                    xtype: 'hidden',
+                    id: 'S_cci_usuario'
                 }
             ],
             dockedItems: [

@@ -14,7 +14,7 @@ and open the template in the editor.
         <link rel="stylesheet" href="resources/css/iconos.css">
         <script src="ext/ext-all.js"></script>
         <script src="ext/locale/ext-lang-es.js"></script>
-        <script src="app/app.js?V=4"></script>
+        <script src="app/app.js?V=6"></script>
     </head>
     <body>
         <div id="qo-panel">

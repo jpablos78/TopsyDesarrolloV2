@@ -7,7 +7,9 @@ Ext.Loader.setConfig({
 
 Ext.application({
     name: 'Topsy',
-    requires: [],
+    requires: [
+        'Topsy.util.Util'
+    ],
     views: [],
 //    stores: [
 //        'StaticStore'

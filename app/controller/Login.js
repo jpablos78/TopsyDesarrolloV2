@@ -60,12 +60,10 @@ Ext.define('Topsy.controller.Login', {
             switch (field.itemId) {
                 case 'txtLogin':
                     var txtClave = Ext.ComponentQuery.query('login textfield#txtClave')[0];
-
                     txtClave.focus();
                     break;
                 case 'txtClave':
                     var btnSubmit = Ext.ComponentQuery.query('login button#btnSubmit')[0];
-
                     btnSubmit.fireEvent('click', btnSubmit, e, options);
                     break;
             }
@@ -79,66 +77,59 @@ Ext.define('Topsy.controller.Login', {
     onClickBtnSubmit: function (button, e, options) {
         var formPanel = button.up('form');
         var login = button.up('login');
-
         if (formPanel.getForm().isValid()) {
             var login_user = Ext.ComponentQuery.query('login textfield#txtLogin')[0].getValue();
             var clave = Ext.ComponentQuery.query('login textfield#txtClave')[0].getValue();
             clave = Topsy.util.MD5.encode(clave);
-
             Ext.get(login.getEl()).mask("Conectandose ...", "procesando");
 
-            var http = new XMLHttpRequest();
-            http.open('HEAD', url, false);
-            http.send();
-            alert(http.status);
-            //return http.status != 404;
+            Ext.Ajax.request({
+                url: 'app/data/login.php',
+                method: 'POST',
+                timeout: 99999999,
+                params: {
+                    action: 'login',
+                    login: login_user,
+                    clave: clave
+                },
+                listeners: {
+                    requestexception: function (conn, response, options, eOpts) {
 
-//            Ext.Ajax.request({
-//                url: 'app/data/login.php',
-//                method: 'POST',
-//                params: {
-//                    action: 'login',
-//                    login: login_user,
-//                    clave: clave
-//                },
-//                success: function (conn, response, options, eOpts) {
-//                    Ext.get(login.getEl()).unmask();
-//
-//                    var result = Topsy.util.Util.decodeJSON(conn.responseText);
-//
-//                    if (result.success) {
-//                        if (result.data >= 1) {
-//                            Ext.getCmp('S_id_institucion').setValue(result.id_institucion);
-//                            Ext.getCmp('S_id_sesion').setValue(result.id_sesion);
-//                            Ext.getCmp('S_id_usuario').setValue(result.id_usuario);
-//                            Ext.getCmp('S_id_perfil').setValue(result.id_perfil);
-//                            Ext.getCmp('S_nombre_perfil').setValue(result.nombre_perfil);
-//                            Ext.getCmp('S_login').setValue(result.login);
-//                            Ext.getCmp('S_nombres_apellidos').setValue(result.nombres_apellidos);
-//
-//                            login.close();
-//                            Ext.create('Topsy.view.MyViewport');
-//                            Topsy.util.SessionMonitor.start();
-//                        } else {
-//                            Topsy.util.Util.showErrorMsg(result.message.reason);
-//                        }
-//                    } else {
-//                        Topsy.util.Util.showErrorMsg(result.message.reason);
-//                    }
-//                },
-//                failure: function (conn, response, options, eOpts) {
-//                    alert('en failure jpablos');
-//                    Ext.get(login.getEl()).unmask();
-//                    Topsy.util.Util.showErrorMsg(conn.responseText);
-//                }
-//            });
+                    }
+                },
+                success: function (conn, response, options, eOpts) {
+                    Ext.get(login.getEl()).unmask();
 
+                    var result = Topsy.util.Util.decodeJSON(conn.responseText);
+                    
+                    if (result.success) {                        
+                        Ext.getCmp('S_us_codigo').setValue(result.us_codigo);
+                        Ext.getCmp('S_se_codigo').setValue(result.se_codigo);
+                        Ext.getCmp('S_us_login').setValue(result.us_login);
+                        Ext.getCmp('S_pe_codigo').setValue(result.pe_codigo);
+                        Ext.getCmp('S_pe_desc').setValue(result.pe_desc);
+                        //Ext.getCmp('S_login').setValue(result.login);
+                        Ext.getCmp('S_us_nombres_apellidos').setValue(result.us_nombres_apellidos);
+                        Ext.getCmp('S_cci_usuario').setValue(result.cci_usuario);
+                        login.close();
+                        //Ext.create('Topsy.view.MyViewport');
+                        Topsy.util.SessionMonitor.start();
+                    } else {
+                        Topsy.util.Util.showErrorMsg(result.message.reason);
+                    }
 
+                },
+                failure: function (conn, response, options, eOpts) {
+                    Ext.get(login.getEl()).unmask();
+                    //alert(conn.statusText);    
+                    //alert(conn.status);    
+                    Topsy.util.Util.showErrorMsg(conn.responseText);
+                }
+            });
         }
     },
     onClickBtnCancel: function (button, e, options) {
         var txtLogin = Ext.ComponentQuery.query('login textfield#txtLogin')[0];
-
         button.up('form').getForm().reset();
         txtLogin.focus();
     },
@@ -150,10 +141,8 @@ Ext.define('Topsy.controller.Login', {
             run: function () {
                 var txtFecha = Ext.ComponentQuery.query('footer button#txtFecha')[0];
                 var txtReloj = Ext.ComponentQuery.query('footer button#txtReloj')[0];
-
                 txtFecha.setText(Ext.Date.format(new Date(), 'd/m/Y'));
                 txtReloj.setText(Ext.Date.format(new Date(), 'G:i:s'));
-
                 //Ext.getCmp('txtFecha').setText(Ext.Date.format(new Date(), 'd/m/Y'));
                 //Ext.getCmp('txtReloj').setText(Ext.Date.format(new Date(), 'G:i:s'));
                 //Ext.getCmp('btnUsuarioMain').setText('xxx..');
@@ -164,7 +153,6 @@ Ext.define('Topsy.controller.Login', {
     },
     onClickBtnSalirSistema: function (button, e, options) {
         var me = this;
-
         if (Ext.ComponentQuery.query('footer hidden#auxBtn')[0].getValue() == 'N') {
             Ext.MessageBox.confirm('Pregunta', 'Esta seguro de que desea cerrar la sesion?', function (btn) {
                 if (btn == 'yes') {
