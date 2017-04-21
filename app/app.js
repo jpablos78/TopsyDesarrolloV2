@@ -16,7 +16,8 @@ Ext.application({
 //    ],
     controllers: [
         'Login',
-        'Menu'
+        'Menu',
+        'seguridades.CambioClave',
     ],
     init: function () {
         console.log('init');

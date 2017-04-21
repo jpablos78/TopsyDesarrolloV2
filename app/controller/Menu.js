@@ -260,13 +260,12 @@ Ext.define('Topsy.controller.Menu', {
 
     },
     onTreepanelItemClick: function (view, record, item, index, event, options) {
-        alert('x');
+        console.log('onTreepanelItemClick');
         this.onTreepanelSelect(view, record, index, options);
     },
     onTreepanelSelect: function (selModel, record, index, options) {
-        //console.log(record.raw.className);
-        //console.log(record.raw.text);       
-        if (record.get('tipo') == 'O') {
+        console.log('onTreepanelSelect');
+        if (record.get('mn_tipo') == 'O') {
             var mainPanel = this.getMainPanel();
 
             var newTab = mainPanel.items.findBy(
@@ -277,7 +276,11 @@ Ext.define('Topsy.controller.Menu', {
             //console.log(record.raw.className);
 
             if (!newTab) {
-                if (record.get('ruta') == '') {
+                console.log('if 1');
+                if (record.get('mn_ruta') == '') {
+                    console.log('if 2');
+                    console.log(record.get('iconCls'));
+                    console.log(record.get('mn_clase'));
                     newTab = mainPanel.add({
                         //xtype: record.raw.className,
                         //xtype: Ext.create('Topsy.view.cambioClave.CambioClave'),
@@ -285,6 +288,7 @@ Ext.define('Topsy.controller.Menu', {
                         closable: true,
                         iconCls: record.get('iconCls'),
                         title: record.get('text'),
+                        bodyStyle: {"background-color": "white"},
                         layout: {
                             type: 'vbox',
                             align: 'center',
@@ -292,13 +296,14 @@ Ext.define('Topsy.controller.Menu', {
                         },
                         items: [
                             {
-                                xtype: record.get('clase'),
+                                xtype: record.get('mn_clase'),
                                 title: record.get('text'),
                                 iconCls: record.get('iconCls')
                             }
                         ]
                     });
                 } else {
+                    console.log('else 2');
                     newTab = mainPanel.add({
                         closable: true,
                         iconCls: record.get('iconCls'),
@@ -307,7 +312,7 @@ Ext.define('Topsy.controller.Menu', {
                         items: [
                             {
                                 xtype: 'uxiframe',
-                                src: record.get('ruta')
+                                src: record.get('mn_ruta')
                             }
                         ]
                     });

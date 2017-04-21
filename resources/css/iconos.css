@@ -167,6 +167,15 @@
     background-image: url(../images/iconos/icon-examen.png) !important;
 }
 
-.icon_upload{
-    background-image: url(../images/iconos/icon_upload.png) !important;
+.icon-bogus{
+    background-image: url(../images/iconos/icon-bogus.png) !important;
 }
+
+.icon-network{
+    background-image: url(../images/iconos/icon-network.png) !important;
+}
+
+.icon-upload{
+    background-image: url(../images/iconos/icon-upload.png) !important;
+}
+
