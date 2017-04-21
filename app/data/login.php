@@ -8,6 +8,9 @@ switch ($action) {
     case 'login':
         login();
         break;
+    case 'cerrarSesionActual':
+        cerrarSesionActual();
+        break;
 }
 
 function login() {
@@ -44,13 +47,13 @@ function login() {
             $ok = $result[0]['OK'];
             $us_codigo = $result[0]['US_CODIGO'];
             $sesionIniciada = 'N';
-            
-            if ($ok == 'S') {                
+
+            if ($ok == 'S') {
                 $objetoSesion = new claseSesion();
-                $resp = $objetoSesion->ingresarSesion($us_codigo);                
-                $json = json_decode($resp);               
+                $resp = $objetoSesion->ingresarSesion($us_codigo);
+                $json = json_decode($resp);
                 $success = $json->success;
-                
+
                 if ($success) {
                     $sesionIniciada = "S";
 
@@ -77,7 +80,7 @@ function login() {
                 "loginOk" => $_SESSION['S_loginOk'],
                 //"data" => $registros,
                 "sesionIniciada" => $sesionIniciada,
-                "us_codigo" => $us_codigo,                
+                "us_codigo" => $us_codigo,
                 "se_codigo" => $_SESSION['S_se_codigo'],
                 "us_login" => $_SESSION['S_us_login'],
                 "pe_codigo" => $_SESSION['S_pe_codigo'],
@@ -92,4 +95,24 @@ function login() {
 
         $objetoBaseDatos->desconectarse();
     }
+}
+
+function cerrarSesionActual() {
+    $se_codigo = $_POST['se_codigo'];
+    $us_codigo = $_POST['us_codigo'];
+
+    $objetoSesion = new claseSesion();
+    $result = $objetoSesion->cerrarSesionActual($se_codigo, $us_codigo);
+
+    session_start();
+    $_SESSION['S_loginOk'] = 'NO';
+    $_SESSION['S_us_codigo'] = '';
+    $_SESSION['S_se_codigo'] = '';
+    $_SESSION['S_us_login'] = '';
+    $_SESSION['S_pe_codigo'] = '';
+    $_SESSION['S_pe_desc'] = '';
+    $_SESSION['S_us_nombres_apellidos'] = '';
+    $_SESSION['S_cci_usuario'] = '';
+
+    echo $result;
 }

@@ -14,7 +14,10 @@ Ext.application({
 //    stores: [
 //        'StaticStore'
 //    ],
-    controllers: ['Login'],
+    controllers: [
+        'Login',
+        'Menu'
+    ],
     init: function () {
         console.log('init');
         splashscreen = Ext.getBody().mask('Inicializando Aplicacion ...', 'splashscreen');

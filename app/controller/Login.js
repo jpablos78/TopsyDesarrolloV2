@@ -10,8 +10,8 @@ Ext.define('Topsy.controller.Login', {
     //    'modulo_sac.Institucion'
     //],
     views: [
-        'Login'//,
-                //    'Footer'
+        'Login',
+        'Footer'
     ],
     init: function () {
         this.control({
@@ -26,12 +26,12 @@ Ext.define('Topsy.controller.Login', {
             'login button[itemId=btnCancel]': {
                 click: this.onClickBtnCancel
             },
-//            'footer': {
-//                render: this.onRenderFooter
-//            },
-//            'footer button[itemId=btnSalirSistema]': {
-//                click: this.onClickBtnSalirSistema
-//            }
+            'footer': {
+                render: this.onRenderFooter
+            },
+            'footer button[itemId=btnSalirSistema]': {
+                click: this.onClickBtnSalirSistema
+            }
         });
     },
 //    onAfterrender: function (abstractcomponent, options) {    
@@ -101,8 +101,8 @@ Ext.define('Topsy.controller.Login', {
                     Ext.get(login.getEl()).unmask();
 
                     var result = Topsy.util.Util.decodeJSON(conn.responseText);
-                    
-                    if (result.success) {                        
+
+                    if (result.success) {
                         Ext.getCmp('S_us_codigo').setValue(result.us_codigo);
                         Ext.getCmp('S_se_codigo').setValue(result.se_codigo);
                         Ext.getCmp('S_us_login').setValue(result.us_login);
@@ -112,12 +112,13 @@ Ext.define('Topsy.controller.Login', {
                         Ext.getCmp('S_us_nombres_apellidos').setValue(result.us_nombres_apellidos);
                         Ext.getCmp('S_cci_usuario').setValue(result.cci_usuario);
                         login.close();
-                        //Ext.create('Topsy.view.MyViewport');
+                        //Ext.getCmp('qo-panel').getEl().hide();
+                        Ext.get("qo-panel").hide();
+                        Ext.create('Topsy.view.MyViewport');
                         Topsy.util.SessionMonitor.start();
                     } else {
                         Topsy.util.Util.showErrorMsg(result.message.reason);
                     }
-
                 },
                 failure: function (conn, response, options, eOpts) {
                     Ext.get(login.getEl()).unmask();
@@ -146,7 +147,7 @@ Ext.define('Topsy.controller.Login', {
                 //Ext.getCmp('txtFecha').setText(Ext.Date.format(new Date(), 'd/m/Y'));
                 //Ext.getCmp('txtReloj').setText(Ext.Date.format(new Date(), 'G:i:s'));
                 //Ext.getCmp('btnUsuarioMain').setText('xxx..');
-                Ext.ComponentQuery.query('footer button#btnUsuarioMain')[0].setText('USUARIO: ' + Ext.getCmp('S_nombres_apellidos').getValue() + ' -> PERFIL: ' + Ext.getCmp('S_nombre_perfil').getValue());
+                Ext.ComponentQuery.query('footer button#btnUsuarioMain')[0].setText('<B>USUARIO: ' + Ext.getCmp('S_us_nombres_apellidos').getValue() + ' -> PERFIL: ' + Ext.getCmp('S_pe_desc').getValue() + '</B>');
             },
             interval: 1000
         });
@@ -167,9 +168,9 @@ Ext.define('Topsy.controller.Login', {
         Ext.Ajax.request({
             url: 'app/data/login.php',
             params: {
-                action: 'cerrarSesionActual',
-                id_institucion: Ext.getCmp('S_id_institucion').getValue(),
-                id_sesion: Ext.getCmp('S_id_sesion').getValue()
+                action: 'cerrarSesionActual',                
+                se_codigo: Ext.getCmp('S_se_codigo').getValue(),
+                us_codigo: Ext.getCmp('S_us_codigo').getValue()
             },
             success: function (conn, response, options, eOpts) {
                 var result = Topsy.util.Util.decodeJSON(conn.responseText);

@@ -207,10 +207,11 @@ class ClaseBaseDatos {
     public function query($query) {
         $nombreFichero = "log.txt";
 
+        session_start();
         $gestor = fopen($nombreFichero, "a+") or die("Problemas en la creacion");
         fwrite($gestor, '--------------------------------------------------------------------------------');
         fwrite($gestor, "\r\n");
-        fwrite($gestor, '-- ' . date("d m Y H:i:s:ms") . " - ");
+        fwrite($gestor, '-- ' . date("d/m/Y H:i:s:ms") . " - us_codigo: " . $_SESSION['S_us_codigo'] . " - nombres: " . $_SESSION['S_us_nombres_apellidos']);
         fwrite($gestor, "\r\n");
         fwrite($gestor, $query);
         fwrite($gestor, "\r\n");
