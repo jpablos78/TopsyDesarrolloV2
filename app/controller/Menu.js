@@ -27,111 +27,9 @@ Ext.define('Topsy.controller.Menu', {
     onPanelRender: function (abstractcomponent, options) {
         console.log('onPanelRender');
 
-        //var menuPanel = Ext.ComponentQuery.query('mainmenu')[0];
-        //var storeMenuFavoritos = this.getStore('MenuFavoritos');
-        //var storeMenu = this.getStore('Menu');
-
-        //        storeMenuFavoritos.load({
-        //            params: {
-        //                action: 'getMenuFavoritosUsuario',
-        //                us_codigo: Ext.getCmp('S_us_codigo').getValue()
-        //            },
-        //            callback: function (records, operation, success) {
-        //                var result = operation.request.proxy.reader.rawData;
-        //                if (success) {
-        //                    var menu = Ext.create('SAC.view.menu.Item', {
-        //                        title: 'Favoritos',
-        //                        store: storeMenuFavoritos
-        //                    });
-        //                        
-        //                        
-        //                    menuPanel.add(menu);
-        //                } else {
-        //                    Topsy.util.Util.showErrorMsg(result.message.reason);
-        //                }
-        //            }
-        //        });
-
-        //                var menu = Ext.create('Topsy.view.menu.Item', {
-        //                    title: 'Favoritos',
-        //                    store: storeMenuFavoritos
-        //                });
-
-
-        //        var store = Ext.create('Ext.data.TreeStore', {
-        //            root: {
-        //                expanded: true,
-        //                children: [
-        //                {
-        //                    text: "detention", 
-        //                    leaf: true
-        //                },
-        //                {
-        //                    text: "homework", 
-        //                    expanded: true, 
-        //                    children: [
-        //
-        //                    {
-        //                        text: "book report", 
-        //                        leaf: true
-        //                    },
-        //                    {
-        //                        text: "algebra", 
-        //                        leaf: true
-        //                    }
-        //                    ]
-        //                },
-        //                {
-        //                    text: "buy lottery tickets", 
-        //                    leaf: true
-        //                }
-        //                ]
-        //            }
-        //        });
-        //
-        //        var menu = Ext.create('Ext.tree.Panel', {
-        //            title: 'Simple Tree',
-        //            width: 200,
-        //            height: 150,
-        //            store: store,
-        //            rootVisible: false,
-        //            renderTo: Ext.getBody()
-        //        });
-        //
-        //        menuPanel.add(menu);
-
-
-
         var menuPanel = Ext.ComponentQuery.query('mainmenu')[0];
         var storeMenuFavoritos = this.getStore('MenuFavoritos');
         var storeMenu = this.getStore('Menu');
-
-        //variables = Topsy.util.Variables;
-
-        //delete storeMenuFavoritos.getProxy().extraParams['includes']
-        //        storeMenuFavoritos.getProxy().extraParams = {
-        //            us_codigo: variables.S_us_codigo,
-        //            action: 'getMenuFavoritosUsuario'
-        //        };
-
-        //        storeMenuFavoritos.load();
-
-        //        storeMenuFavoritos.getProxy().extraParams.us_codigo = Ext.getCmp('S_us_codigo').getValue();
-        //        storeMenuFavoritos.getProxy().extraParams.action = 'getMenuFavoritosUsuario';
-
-
-
-        //alert(variables.S_us_codigo);
-
-        //        storeMenuFavoritos.on('beforeload', function (store, operation, eOpts) {
-        //            alert('xxx');
-        //            operation.params.us_codigo = variables.S_us_codigo;//Ext.getCmp('S_us_codigo').getValue();
-        //            operation.params.action = 'getMenuFavoritosUsuario';
-        //        //            var proxy = store.getProxy();
-        //        //            proxy.setExtraParam('CCI_EMPRESA', Ext.getCmp('cmbEmpresa').getValue());
-        //        //            proxy.setExtraParam('CCI_SUCURSAL', Ext.getCmp('txtCodigoSucursal').getValue());
-        //        //            proxy.setExtraParam('action', 'listarVendedoresComisionValidos');            
-        //        });
 
         storeMenuFavoritos.load({
             params: {
@@ -265,7 +163,7 @@ Ext.define('Topsy.controller.Menu', {
     },
     onTreepanelSelect: function (selModel, record, index, options) {
         console.log('onTreepanelSelect');
-        if (record.get('mn_tipo') == 'O') {
+        if (record.get('MN_TIPO') == 'O') {
             var mainPanel = this.getMainPanel();
 
             var newTab = mainPanel.items.findBy(
@@ -273,50 +171,74 @@ Ext.define('Topsy.controller.Menu', {
                         return tab.title === record.get('text');
                     });
 
-            //console.log(record.raw.className);
-
             if (!newTab) {
-                console.log('if 1');
-                if (record.get('mn_ruta') == '') {
-                    console.log('if 2');
-                    console.log(record.get('iconCls'));
-                    console.log(record.get('mn_clase'));
-                    newTab = mainPanel.add({
-                        //xtype: record.raw.className,
-                        //xtype: Ext.create('Topsy.view.cambioClave.CambioClave'),
-                        //xtype: 'cambioclave',
-                        closable: true,
-                        iconCls: record.get('iconCls'),
-                        title: record.get('text'),
-                        bodyStyle: {"background-color": "white"},
-                        layout: {
-                            type: 'vbox',
-                            align: 'center',
-                            pack: 'center'
-                        },
-                        items: [
-                            {
-                                xtype: record.get('mn_clase'),
-                                title: record.get('text'),
-                                iconCls: record.get('iconCls')
+
+                Ext.Ajax.request({
+                    url: 'app/data/sesion.php',
+                    params: {
+                        action: 'verificarSesionValida',
+                        se_codigo: Ext.getCmp('S_se_codigo').getValue()
+                    },
+                    success: function (conn, response, options, eOpts) {
+                        var result = Topsy.util.Util.decodeJSON(conn.responseText);
+
+                        if (result.success) {
+                            if (result.data[0]['OK'] == 'S') {
+                                if (record.get('MN_CLASE') != '') {
+                                    if (record.get('MN_RUTA') == '') {
+                                        newTab = mainPanel.add({
+                                            closable: true,
+                                            iconCls: record.get('iconCls'),
+                                            title: record.get('text'),
+                                            bodyStyle: {"background-color": "white"},
+                                            layout: {
+                                                type: 'vbox',
+                                                align: 'center',
+                                                pack: 'center'
+                                            },
+                                            items: [
+                                                {
+                                                    xtype: record.get('MN_CLASE'),
+                                                    title: record.get('text'),
+                                                    iconCls: record.get('iconCls')
+                                                }
+                                            ]
+                                        });
+                                    } else {
+                                        newTab = mainPanel.add({
+                                            closable: true,
+                                            iconCls: record.get('iconCls'),
+                                            title: record.get('text'),
+                                            layout: 'fit',
+                                            items: [
+                                                {
+                                                    xtype: 'uxiframe',
+                                                    src: record.get('MN_RUTA')
+                                                }
+                                            ]
+                                        });
+                                    }
+
+                                    var mn_codigo = record.get('MN_CLASE') + " hidden#mn_codigo";
+
+                                    Ext.ComponentQuery.query(mn_codigo)[0].setValue(record.get('MN_CODIGO'));
+
+                                    mainPanel.setActiveTab(newTab);
+                                }
+                            } else {
+                                Topsy.util.Util.showErrorMsg('Atención la sesión fue cerrada y no es válida, por favor salga del sistema y vuelva a ingresar...');
                             }
-                        ]
-                    });
-                } else {
-                    console.log('else 2');
-                    newTab = mainPanel.add({
-                        closable: true,
-                        iconCls: record.get('iconCls'),
-                        title: record.get('text'),
-                        layout: 'fit',
-                        items: [
-                            {
-                                xtype: 'uxiframe',
-                                src: record.get('mn_ruta')
-                            }
-                        ]
-                    });
-                }
+                        } else {
+                            Topsy.util.Util.showErrorMsg(result.message.reason);
+                        }
+                    },
+                    failure: function (conn, response, options, eOpts) {
+                        Topsy.util.Util.showErrorMsg(conn.responseText);
+                    }
+                });
+
+
+
             }
             mainPanel.setActiveTab(newTab);
         }

@@ -60,6 +60,10 @@ Ext.define('Topsy.view.seguridades.CambioClave', {
                     fieldLabel: 'Contraseña Nueva',
                     inputType: 'password',
                     enableKeyEvents: true
+                },
+                {
+                    xtype: 'hidden',
+                    itemId: 'mn_codigo'
                 }
             ]
         }

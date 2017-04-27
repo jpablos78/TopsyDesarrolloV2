@@ -14,8 +14,8 @@ switch ($action) {
 }
 
 function adj_tree(&$tree, $item) {
-    $i = $item['mn_codigo'];
-    $p = $item['mn_cod_padre'];
+    $i = $item['MN_CODIGO'];
+    $p = $item['MN_COD_PADRE'];
     $tree[$i] = isset($tree[$i]) ? $item + $tree[$i] : $item;
 
     $tree[$p]['children'][] = &$tree[$i];
@@ -50,15 +50,15 @@ function getMenu() {
                 }
 
                 $arr = array(
-                    'mn_codigo' => $rows['MN_CODIGO'],
-                    'mn_cod_padre' => $rows['MN_COD_PADRE'],
+                    'MN_CODIGO' => $rows['MN_CODIGO'],
+                    'MN_COD_PADRE' => $rows['MN_COD_PADRE'],
                     'text' => $rows['MN_NOMBRE'],
-                    'mn_tipo' => $rows['MN_TIPO'],
+                    'MN_TIPO' => $rows['MN_TIPO'],
                     'iconCls' => trim($rows['MN_ICONO']),
-                    'mn_clase' => trim($rows['MN_CLASE']),
-                    'mn_ruta' => trim($rows['MN_RUTA']),
+                    'MN_CLASE' => trim($rows['MN_CLASE']),
+                    'MN_RUTA' => trim($rows['MN_RUTA']),
                     'leaf' => $leaf,
-                    'expanded' => $expanded,
+                    'EXPANDED' => $expanded,
                 );
                 
                  if (($rows['MN_TIPO'] == 'P')) {
@@ -103,15 +103,15 @@ function getMenuFavoritos() {
                 $expanded = false;
 
                 $arr = array(
-                    'mn_codigo' => $rows['MN_CODIGO'],
-                    'mn_cod_padre' => $rows['MN_COD_PADRE'],
+                    'MN_CODIGO' => $rows['MN_CODIGO'],
+                    'MN_COD_PADRE' => $rows['MN_COD_PADRE'],
                     'text' => $rows['MN_NOMBRE'],
-                    'mn_tipo' => $rows['MN_TIPO'],
+                    'MN_TIPO' => $rows['MN_TIPO'],
                     'iconCls' => trim($rows['MN_ICONO']),
-                    'mn_clase' => trim($rows['MN_CLASE']),
-                    'mn_ruta' => trim($rows['MN_RUTA']),
+                    'MN_CLASE' => trim($rows['MN_CLASE']),
+                    'MN_RUTA' => trim($rows['MN_RUTA']),
                     'leaf' => $leaf,
-                    'expanded' => $expanded,
+                    'EXPANDED' => $expanded,
                 );
 
                 array_push($tree, $arr);

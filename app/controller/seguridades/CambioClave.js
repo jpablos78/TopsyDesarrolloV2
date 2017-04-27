@@ -36,6 +36,13 @@ Ext.define('Topsy.controller.seguridades.CambioClave', {
     onClickBtnGrabar: function (button, e, options) {
         var formPanel = button.up('form');
 
+        //alert(Ext.ClassManager.getName(this));
+        //alert(Ext.ClassManager.getDisplayName(this));
+        
+        //alert(this.mn_codigo);
+        
+        //alert(this.alias);
+
         if (formPanel.getForm().isValid()) {
             var clave = Topsy.util.MD5.encode(Ext.ComponentQuery.query('cambioclave textfield#txtClave')[0].getValue());
             var clave_nueva = Topsy.util.MD5.encode(Ext.ComponentQuery.query('cambioclave textfield#txtClaveNueva')[0].getValue());
@@ -43,16 +50,19 @@ Ext.define('Topsy.controller.seguridades.CambioClave', {
             Ext.Ajax.request({
                 url: 'app/data/cambioclave.php',
                 params: {
-                    action: 'cambioClave',                    
+                    action: 'cambioClave',
+                    S_se_codigo: Ext.getCmp('S_se_codigo').getValue(),
+                    S_us_codigo: Ext.getCmp('S_us_codigo').getValue(),
+                    mn_codigo: Ext.ComponentQuery.query('cambioclave hidden#mn_codigo')[0].getValue(),
                     us_codigo: Ext.getCmp('S_us_codigo').getValue(),
                     us_login: Ext.getCmp('S_us_login').getValue(),
-                    clave: clave,
-                    clave_nueva: clave_nueva
+                    us_pass: clave,
+                    us_new_pass: clave_nueva
                 },
                 success: function (conn, response, options, eOpts) {
                     var result = Topsy.util.Util.decodeJSON(conn.responseText);
                     if (result.success) {
-                        if (result.data[0].ok == 'S') {
+                        if (result.data[0].OK == 'S') {
                             //Topsy.util.Util.showOkMsg(result.message.reason);
                             Ext.Msg.show({
                                 title: 'Mensaje del Sistema',
@@ -66,7 +76,7 @@ Ext.define('Topsy.controller.seguridades.CambioClave', {
                             });
                         } else {
                             //Topsy.util.Util.showErrorMsg(result.message.reason);
-                            Topsy.util.Util.showErrorMsg('La clave ingresada es incorrecta');
+                            Topsy.util.Util.showErrorMsg(result.message.reason);
                         }
 
                     } else {

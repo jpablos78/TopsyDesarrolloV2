@@ -47,14 +47,81 @@ class ClaseSesion {
             $objetoBaseDatos->autocommit(false);
             $result = $objetoBaseDatos->queryJson($query);
 
-            if ($objetoBaseDatos->getErrorNo()) {                
+            if ($objetoBaseDatos->getErrorNo()) {
                 $result = $objetoBaseDatos->getErrorMsjJson($query);
                 $objetoBaseDatos->rollback();
             } else {
                 $objetoBaseDatos->commit();
             }
 
-            $objetoBaseDatos->desconectarse();            
+            $objetoBaseDatos->desconectarse();
+            return $result;
+        }
+    }
+
+    /**
+     * Verifica si la sesion del usuario es valida
+     * @param string $se_codigo codigo de la sesion a verificar
+     */
+    function verificaSesionValida($se_codigo) {
+        $objetoBaseDatos = new claseBaseDatos();
+
+        if ($objetoBaseDatos->getErrorConexionNo()) {
+            return $objetoBaseDatos->getErrorConexionJson();
+        } else {
+            $query = "
+                EXEC SP_SESION
+                @SE_CODIGO = '$se_codigo',                                
+                @OPERACION = 'VSV'               
+                ";
+
+            $objetoBaseDatos->autocommit(false);
+            $result = $objetoBaseDatos->queryJson($query);
+
+            if ($objetoBaseDatos->getErrorNo()) {
+                $result = $objetoBaseDatos->getErrorMsjJson($query);
+                $objetoBaseDatos->rollback();
+            } else {
+                $objetoBaseDatos->commit();
+            }
+
+            $objetoBaseDatos->desconectarse();
+            return $result;
+        }
+    }
+
+    /**
+     * Verifica si la sesion y los permisos que tiene un usuario en una opcion 
+     * del menu son validos
+     * @param string $se_codigo codigo de la sesion a verificar
+     * @param string $us_codigo codigo del usuario
+     * @param string $mn_codigo codigo de la opcion
+     */
+    function verificaSesionPermiso($se_codigo, $us_codigo, $mn_codigo) {
+        $objetoBaseDatos = new claseBaseDatos();
+
+        if ($objetoBaseDatos->getErrorConexionNo()) {
+            return $objetoBaseDatos->getErrorConexionJson();
+        } else {
+            $query = "
+                EXEC SP_SESION
+                @SE_CODIGO = '$se_codigo',  
+                @US_CODIGO = '$us_codigo',
+                @MN_CODIGO = '$mn_codigo',
+                @OPERACION = 'VSP'               
+                ";
+
+            $objetoBaseDatos->autocommit(false);
+            $result = $objetoBaseDatos->queryJson($query);
+
+            if ($objetoBaseDatos->getErrorNo()) {
+                $result = $objetoBaseDatos->getErrorMsjJson($query);
+                $objetoBaseDatos->rollback();
+            } else {
+                $objetoBaseDatos->commit();
+            }
+
+            $objetoBaseDatos->desconectarse();
             return $result;
         }
     }

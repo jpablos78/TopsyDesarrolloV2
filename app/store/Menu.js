@@ -17,16 +17,16 @@ Ext.define('Topsy.store.Menu', {
 
     fields: [
         {
-            name: 'mn_codigo',
+            name: 'MN_CODIGO',
             type: 'int'
         },
 
         {
-            name: 'mn_cod_padre',
+            name: 'MN_COD_PADRE',
             type: 'int'
         },
         {
-            name: 'mn_tipo',
+            name: 'MN_TIPO',
             type: 'string'
         },
         {
@@ -40,12 +40,12 @@ Ext.define('Topsy.store.Menu', {
         },
 
         {
-            name: 'mn_clase',
+            name: 'MN_CLASE',
             type: 'string'
         },
 
         {
-            name: 'mn_ruta',
+            name: 'MN_RUTA',
             type: 'string'
         },
 
