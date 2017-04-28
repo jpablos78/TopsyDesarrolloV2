@@ -163,6 +163,7 @@ Ext.define('Topsy.controller.Menu', {
     },
     onTreepanelSelect: function (selModel, record, index, options) {
         console.log('onTreepanelSelect');
+        console.log(record.get('MN_CLASE'));
         if (record.get('MN_TIPO') == 'O') {
             var mainPanel = this.getMainPanel();
 
